@@ -1,0 +1,3 @@
+// displays the number of documents in the collecyion school
+
+db.school.count()

@@ -32,14 +32,14 @@ class Cache:
             return fn(result)
         return result
 
-    def get_str(self, key):
+    def get_str(self, key: str) -> str:
         """Automatially parameterize Cache.get with
         string type
         """
-        return self.get(key, fn=str)
+        return self.get(key, fn=str).decode("utf-8")
 
-    def get_int(self, key):
+    def get_int(self, key: int) -> int:
         """Automatially parameterize Cache.get with
         int type
         """
-        return self.get(key, fn=int)
+        return self.get(key, fn=int).decode("utf-8")

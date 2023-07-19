@@ -31,6 +31,3 @@ def get_page(url: str) -> str:
     """
     results = requests.get(url)
     return results.text
-
-
-print(get_page("http://slowwly.robertomurray.co.uk"))

@@ -6,7 +6,7 @@ and stores the input data it gets from the parameter as the value
 """
 import redis
 import uuid
-from typing import Union
+from typing import Union, Optional, Callable, Any
 
 
 class Cache:
@@ -21,3 +21,25 @@ class Cache:
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
+
+    def get(self, key: str, fn: Union[Callable[..., Any], None]) -> Any:
+        """Gets a value of a key and converts it
+        to its desirable format
+        """
+        result = self._redis.get(key)
+
+        if result is not None and fn is not None:
+            return fn(result)
+        return result
+
+    def get_str(self, key):
+        """Automatially parameterize Cache.get with
+        string type
+        """
+        return self.get(key, fn=str)
+
+    def get_int(self, key):
+        """Automatially parameterize Cache.get with
+        int type
+        """
+        return self.get(key, fn=int)

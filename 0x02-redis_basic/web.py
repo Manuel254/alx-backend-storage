@@ -17,7 +17,7 @@ def count_url_access(func: Callable) -> Callable:
         key = "count:{}".format(*args)
         text = func(*args, **kwargs)
         r.incr(key)
-        r.expire(key, 300)
+        r.expire(key, 10)
         return text
     return wrapper
 

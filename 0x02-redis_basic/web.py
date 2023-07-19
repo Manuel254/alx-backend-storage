@@ -5,6 +5,8 @@ import requests
 from typing import Callable
 from functools import wraps
 
+r = redis.Redis()
+
 
 def count_url_access(func: Callable) -> Callable:
     """Decorator function that counts the number
@@ -13,7 +15,6 @@ def count_url_access(func: Callable) -> Callable:
     @wraps(func)
     def wrapper(*args, **kwargs):
         """Function responsible for incrementing count"""
-        r = redis.Redis()
         key = "count:{}".format(*args)
         text = func(*args, **kwargs)
         r.incr(key)

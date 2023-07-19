@@ -27,6 +27,7 @@ def call_history(method: Callable) -> Callable:
         return val
     return wrapper
 
+
 def count_calls(method: Callable) -> Callable:
     """Decorator function that counts how many times
     methods of the Cache class are called
@@ -42,6 +43,23 @@ def count_calls(method: Callable) -> Callable:
         self._redis.incr(key)
         return val
     return wrapper
+
+
+def replay(method: Callable) -> None:
+    """Displays history of calls of a particular function"""
+    key = method.__qualname__
+    r = redis.Redis()
+    calls = r.get(key).decode('utf-8')
+
+    print("{} was called {} times:".format(key, calls))
+
+    inputs = r.lrange("{}:inputs".format(key), 0, -1)
+    outputs = r.lrange("{}:outputs".format(key), 0, -1)
+
+    for k, v in zip(inputs, outputs):
+        k = k.decode('utf-8')
+        v = v.decode('utf-8')
+        print("{}(*{}) -> {}".format(key, k, v))
 
 
 class Cache:
